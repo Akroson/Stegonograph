@@ -94,11 +94,11 @@ static uint16_t read_bit(struct Img_Des *Img, uint8_t count)
 	}
 
 	if (Img->bit >= (9 - count)) {
-		val = (Img->body[Img->ptr++] & (Img->help_read[count] << Img->bit)) >> Img->bit;
+		val = (Img->body[Img->ptr++] & ((0xFF >> (8 - count)) << Img->bit)) >> Img->bit;
 		Img->bit = (Img->bit + count) - 8;
-		val |= (Img->body[Img->ptr] & Img->help_read[Img->bit]) << (count - Img->bit);
+		val |= (Img->body[Img->ptr] & (0xFF >> (8 - Img->bit))) << (count - Img->bit);
 	} else {
-		val = (Img->body[Img->ptr] & (Img->help_read[count] << Img->bit)) >> Img->bit;
+		val = (Img->body[Img->ptr] & ((0xFF >> (8 - count)) << Img->bit)) >> Img->bit;
 		Img->bit += count;
 	}
 
@@ -643,9 +643,7 @@ void png_start_stego(struct Img_Des *Img, struct Start_Par *Str_Par)
 {
 	struct Png_Par Param;
 	struct Line line;
-	uint8_t bit_fill[] = {0x00, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF};
-
-	Img->help_read = bit_fill;
+	
 	Img->bit = Img->ptr = Param.sub_len = line.num = line.bit_set = 0;
 	line.str = NULL;
 

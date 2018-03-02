@@ -21,7 +21,6 @@ struct Img_Des
 {
 	char *stego_name;
 	uint8_t *body;
-	uint8_t *help_read;
 	uint32_t ptr;
 	uint32_t size;
 	uint8_t bit;
